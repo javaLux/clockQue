@@ -1,0 +1,270 @@
+package myjfxprojects.sciFiDigitalClock.main;
+
+import javax.swing.ImageIcon;
+
+import org.slf4j.Logger;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
+import javafx.util.Duration;
+import myjfxprojects.sciFiDigitalClock.business.ControlDateInfos;
+import myjfxprojects.sciFiDigitalClock.business.ControlDigitalClock;
+import myjfxprojects.sciFiDigitalClock.business.ControlHourHand;
+import myjfxprojects.sciFiDigitalClock.business.ControlMinuteHand;
+import myjfxprojects.sciFiDigitalClock.business.ManageVBoxMiddle;
+import myjfxprojects.sciFiDigitalClock.business.SettingsViewApp;
+import myjfxprojects.sciFiDigitalClock.business.Weather;
+import myjfxprojects.sciFiDigitalClock.common.ApplicationLogger;
+import myjfxprojects.sciFiDigitalClock.common.DataBean;
+import myjfxprojects.sciFiDigitalClock.common.ErrorBoxSwing;
+import myjfxprojects.sciFiDigitalClock.common.FxmlUtil;
+import myjfxprojects.sciFiDigitalClock.common.InternetConn;
+import myjfxprojects.sciFiDigitalClock.common.UndecoratedWindow;
+import myjfxprojects.sciFiDigitalClock.customTooltip.TimeZoneTooltip;
+import myjfxprojects.sciFiDigitalClock.database.DbDirectory;
+import myjfxprojects.sciFiDigitalClock.database.DbHandling;
+import myjfxprojects.sciFiDigitalClock.location.CustomComboBox;
+import myjfxprojects.sciFiDigitalClock.location.LocationListViewApp;
+
+
+/**
+ * JavaFX APP
+ */
+public class App extends Application {
+	
+	// initialize data bean singleton
+	private DataBean dataBean = DataBean.getInstance();
+	
+	// root layout manager
+	private Parent root = null;
+	
+	
+	@Override
+	public void init() {
+		
+		// get a Thread safe instance of application logger
+    	Logger LOGGER = ApplicationLogger.getAppLogger();
+    	
+		// create (if not exists) the database directory
+		if(! DbDirectory.createDbDirectory()) {
+			// if failed to create database dir -> show error msg box and shutdown application
+			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
+					"Failed to create the database directory\n'" + DbDirectory.DB_DIR.getAbsolutePath() + "'" + "\nApplication will closed. For more informations, see the log file.",
+					new ImageIcon("src/main/resources/images/wheelChair.png"));
+			
+			System.exit(1);
+		}
+		
+		// initialize a new API instance to speak with the SQlite database and store them in data bean
+		this.dataBean.setJooqDbApi(new DbHandling());
+		
+		// if the connection to the database failed -> show error msg box and shut down application	
+		if(! this.dataBean.getJooqDbApi().establishDbConnection()) {
+			// if failed to create database dir -> show error msg box and shutdown application
+			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
+					"Failed to established a connection to the database\n" + "Application will closed. For more informations, see the log file.",
+					new ImageIcon("src/main/resources/images/wheelChair.png"));
+			
+			System.exit(1);
+			
+		}
+		else {
+			// load all available locations from database into the data bean
+			this.dataBean.getJooqDbApi().getAvailableLocations();
+			
+			// load user settings from database
+			this.dataBean.getJooqDbApi().getApplicationSettings();
+		}
+		
+		// initialize and start ScheduledService for check Internet connection at runtime
+		// every 10 seconds
+		InternetConn.SCHEDULED_SERVICE_INTERNET_CONN.setPeriod(Duration.seconds(10));
+		
+		try {
+			
+			InternetConn.SCHEDULED_SERVICE_INTERNET_CONN.start();
+			
+		} catch (Exception ex) {			
+			// handle exception from executing this service
+			LOGGER.error("Failed to execute the scheduled service 'SCHEDULED_SERVICE_INTERNET_CONN' ", ex);
+			
+			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
+					"Failed to execute the schedulded service to check the Internet connectivity\n" + "Application will closed. For more informations, see the log file.",
+					new ImageIcon("src/main/resources/images/wheelChair.png"));
+			
+			System.exit(1);
+		}
+	
+	}
+
+    @Override
+    public void start(Stage primaryStage) {
+
+    	// FXML Util class object
+    	FxmlUtil fxmlUtil = new FxmlUtil();
+        
+    	// load FXML file to root layout container with self made
+    	// FxmlUtil class 
+    	this.root = fxmlUtil.loadFxmlFile("/fxml/ClockView.fxml");
+    	
+    	// if FXML file successfully loaded -> set in scene
+    	if(this.root != null) {
+    		
+    		// if SET of possible locations after database query empty than use the default / Fallback location "Berlin"
+    		if(this.dataBean.getUserLocationsSet().isEmpty()) {
+    			
+    			// add default location to the list of user location in data bean, to make it available in combo box
+    			this.dataBean.getUserLocationsSet().add(this.dataBean.getDefaultLocation());
+    			// change the GEO data for the latitude and longitude value to the default location
+    			this.dataBean.setLatitude(this.dataBean.getDefaultLocation().getLatitude());
+    			this.dataBean.setLongitude(this.dataBean.getDefaultLocation().getLongitude());			
+    		}
+    		
+    		// initialize and save application class for the location list view in data bean
+    		this.dataBean.setLocationListViewApp(new LocationListViewApp());
+    		
+    		// initialize and save application class for the settings view in data bean
+    		this.dataBean.setSettingsViewApp(new SettingsViewApp());
+    		
+    		// save primary stage in model
+        	this.dataBean.setPrimaryStage(primaryStage);
+    		
+    		// get digital clock instance
+    		ControlDigitalClock digitalClock = new ControlDigitalClock();
+    		
+    		// get hour hand instance
+    		ControlHourHand hourHand = new ControlHourHand();
+    		
+    		// get minute hand instance
+    		ControlMinuteHand minuteHand = new ControlMinuteHand();
+    		
+    		Scene scene = new Scene(root);
+    		
+    		// load specific Style sheet file
+    		scene.getStylesheets().add(this.getClass().getResource("/css/mainView.css").toExternalForm());
+    		
+        	primaryStage.setScene(scene);
+   
+        	// set the undecorated primary stage -> this means without frame
+        	primaryStage.initStyle(StageStyle.TRANSPARENT);
+        	scene.setFill(Color.TRANSPARENT);
+        	// set icon for dock and main window
+        	primaryStage.getIcons().add(new Image("images/clock.png"));
+        	// set window name
+        	primaryStage.setTitle(DataBean.APP_NAME);
+        	
+        	// IMPORTANT: replace the main window to the last x and y values from database
+        	primaryStage.setX(DataBean.current_X_Pos_MainWindow);
+        	primaryStage.setY(DataBean.current_Y_Pos_MainWindow);
+        	
+        	// dependent on database value -> maximize or minimize VBox middle (with Combo Box etc.)
+        	if(DataBean.isVBoxMiddleMinimize) {
+        		ManageVBoxMiddle.minimizeVBoxMiddle();
+        	}
+        	else {
+        		ManageVBoxMiddle.maximizeVBoxMiddle();
+        	}
+        	
+        	primaryStage.show();       	
+        	primaryStage.setResizable(false);
+        	
+        	// Add InvalidationListener to primary stage -> listens to x and y position on screen
+    		primaryStage.xProperty().addListener(new primaryStagePosListener());
+    		primaryStage.yProperty().addListener(new primaryStagePosListener());
+        	
+        	// set once current date informations
+        	this.dataBean.getDigitalClockFXMLcontroller().setLblWeekDay(ControlDateInfos.getInstance().getCurrentDayOfWeek());
+        	this.dataBean.getDigitalClockFXMLcontroller().setLblMonth(ControlDateInfos.getInstance().getCurrentMonth());
+        	this.dataBean.getDigitalClockFXMLcontroller().setLblMonthDay(ControlDateInfos.getInstance().getCurrentDayOfMonth());
+        	
+        	//first after showing set digital clock on current time
+        	digitalClock.setDigitalClockOnStartUp();
+        	
+        	// set once the hour hand on current hour
+        	hourHand.setHourHandOnStartUp();
+        	
+        	// set once the minute hand on current minute
+        	minuteHand.setMinuteHandOnStartUp();
+        	
+        	// allow mouse drag&drop on the main window without frame
+        	UndecoratedWindow undecoratedWindow = new UndecoratedWindow();
+        	undecoratedWindow.allowDragAndDrop(root, primaryStage);
+        	
+        	// initialize the custom time zone tool tip for the digital clock
+        	// the constructor of this tool tip will be save the instance in the data bean
+        	new TimeZoneTooltip();
+        	
+        	// start animation of digital clock, hour and minute hand
+        	digitalClock.startDigitalClockAnimation();
+        	hourHand.startHourHandAnimation();
+        	minuteHand.startMinuteHandAnimation();
+        	
+        	// initialize thread safe instance of weather object and start fetching weather data
+        	Weather.getInstance().startPeriodicallyFetchWeatherData();
+        
+        	// initialize custom combo-box for locations objects
+        	//
+        	// save instance in data bean
+        	this.dataBean.setCustomComboBox(new CustomComboBox());
+        	
+        	// Add event filter to handle close event for the primary stage
+        	// IMPORTANT: if main window will closed from task bar -> than close the complete application with all opened windows
+        	primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
+        		
+        		Platform.exit();
+        	});
+    	}
+    	
+    }
+    
+    /**
+     * Method writes the current application settings in the SQlite database.
+     */
+    @Override
+    public void stop() {
+    	
+    	this.dataBean.getJooqDbApi().setApplicationSettings(); 
+    	this.dataBean.getJooqDbApi().closeDbConnection();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+ 	
+    // this InvalidationListener listens to the x and y position of a stage on screen
+ 	// if stage is moved (drag&drop) on desktop -> you can get the changed x and y position
+ 	class primaryStagePosListener implements InvalidationListener {
+
+ 		@Override
+ 		public void invalidated(Observable observable) {
+ 			
+ 			// save current position of main window (stage) in model if this is changing
+ 			DataBean.current_X_Pos_MainWindow = dataBean.getPrimaryStage().getX();
+ 			DataBean.current_Y_Pos_MainWindow = dataBean.getPrimaryStage().getY();
+ 			
+ 			// replace the list view stage if primary stage will moved on desktop
+ 			if((dataBean.getListViewStage() != null) && (dataBean.getListViewStage().isShowing())) {
+ 				
+ 				dataBean.getListViewStage().getScene().getWindow().setX(DataBean.current_X_Pos_MainWindow);
+ 				dataBean.getListViewStage().getScene().getWindow().setY(DataBean.current_Y_Pos_MainWindow + dataBean.getPrimaryStage().getHeight());
+ 			}
+ 			
+ 			// replace the settings view stage if primary stage will move on desktop
+ 			if((dataBean.getSettingsViewStage() != null) && (dataBean.getSettingsViewStage().isShowing())) {
+ 				
+ 				dataBean.getSettingsViewStage().getScene().getWindow().setX(DataBean.current_X_Pos_MainWindow);
+ 				dataBean.getSettingsViewStage().getScene().getWindow().setY(DataBean.current_Y_Pos_MainWindow + dataBean.getPrimaryStage().getHeight());
+ 			}
+ 		}
+ 	}
+
+}

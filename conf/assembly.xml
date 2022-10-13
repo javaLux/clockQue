@@ -1,0 +1,44 @@
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>zip</id>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+
+		<!-- Add the .exe from target folder to the ZIP -->
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<!-- store the exe file in root directory of ZIP archive -->
+			<outputDirectory />
+			<includes>
+				<include>${project.name}.exe</include>
+			</includes>
+		</fileSet>
+
+		<!-- Add the JRE from the systems JDK location, to the ZIP <directory>${sys.java.home}</directory> 
+			<directory>${project.basedir}</directory> -->
+		<fileSet>
+			<!-- In this case we add a custom JDK with specific modules from the system 
+				JDK, that has the advantage the size of the JRE is very smaller -->
+			<directory>${project.basedir}/customJDK-18.0.1.1</directory>
+			<outputDirectory>lib/customJDK-18.0.1.1</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+	<files>
+		<!-- Add README to ZIP archive -->
+		<file>
+			<source>${project.basedir}/README.txt</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<!-- Add license file to the ZIP archive -->
+		<file>
+			<source>${project.basedir}/LICENSE</source>
+			<outputDirectory>license/</outputDirectory>
+		</file>
+	</files>
+</assembly>

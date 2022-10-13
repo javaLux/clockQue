@@ -1,0 +1,36 @@
+/*
+ * JavaFX CSS
+ * 
+ * .Styleclass selector
+ * 
+ * #ID selcector
+ * 
+ * :Pseudo classes
+ * 
+ * Stylesheet CSS file for differents nodes on the SettingsView Stage, these stage will
+ * showing when user call the application settings.
+ */
+ 
+#btnCloseSettingsView {
+	-fx-background-color: transparent;
+ 	-fx-background-image: url("../images/cross.png");
+ 	-fx-background-repeat: no-repeat;
+}
+
+#btnCloseSettingsView:hover {
+	-fx-scale-x: 1.2;
+	-fx-scale-y: 1.2;
+}
+
+/*
+ * Styling grid pane root layout manager from settings view stage
+ */
+ #rootGridPane {
+ 	-fx-background-color: 
+        #090a0c80,
+        linear-gradient(#38424b80 0.0%, #1f242980 20.0%, #191d2280 100.0%),
+        linear-gradient(#20262b80, #191d2280),
+        radial-gradient(center 50.0% 0.0%, radius 100.0%, rgba(114.0,131.0,148.0,0.9), rgba(255.0,255.0,255.0,0.0));
+        
+    -fx-background-radius: 8,7,6;
+}

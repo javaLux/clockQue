@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="RollingFileLogConfig" status="WARN" monitorInterval="10">
+  <Properties>
+    <Property name="LOG_DIR">log</Property>
+  </Properties>
+  <Appenders>
+    <RollingFile name="fileLogger" fileName="${LOG_DIR}/app.log" filePattern="${LOG_DIR}/application.%d{yyyy_MM_dd}.log.gz" ignoreExceptions="false">
+      <PatternLayout>
+        <Pattern>\n%d{yyyy-MM-dd HH:mm:ss} %level [%t] [%l] \n- %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB" />
+        <TimeBasedTriggeringPolicy interval="1" />
+      </Policies>
+      <DefaultRolloverStrategy>
+        <Delete basePath="${LOG_DIR}" maxDepth="2">
+          <IfFileName glob="*/app*.log.gz" />
+          <IfLastModified age="P30D" />
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Root level="warn">
+      <AppenderRef ref="fileLogger" />
+    </Root>
+  </Loggers>
+</Configuration>

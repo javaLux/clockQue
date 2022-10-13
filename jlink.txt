@@ -1,0 +1,38 @@
+Jlink ist ein Tool welches in das JDK integriert ist und es erlaubt ein eigenes JDK mit den benötigten Modulen für seine Anwendung zu erstellen.
+Folgenden CMD Befehl ausführen -> eventuell müssen Module angepasst werden.
+
+jlink --compress=2 --strip-debug --module-path jmods --add-modules java.base,java.compiler,java.datatransfer,java.xml,java.prefs,java.desktop,java.logging,java.management,java.security.sasl,java.naming,java.rmi,java.scripting,java.transaction.xa,java.sql,jdk.localedata,jdk.charsets,jdk.unsupported,jdk.crypto.ec --output customJDK
+
+JDeps ist eine Kommandozeilen Tool (enthalten im JDK wie auch JLink) welches die Modul Abhängigkeiten einer Java Anwendung aufzeigt.
+Die Nutzung ist wie im unteren Befehl aufgezeigt. Darauf zu achten ist das dass JAR ohne eine Multi-Release Option gebaut wird, um die
+Ergebnisse der tatsächlichen Abhängigkeiten nicht zu verfälschen. Sind alle notwendigen Module identifiziert und das Custom JDK mit Jlink gebaut,
+kann das JAR auch als Multi-Release JAR wieder gebaut werden.
+WICHTIG ist ebenfalls bei einer JavaFX Applikation, das dem JAR bei Ausführung mit Jdeps alle notwendigen JavaFX Module mitgegeben werden, um auch
+wirklich die Module zu identifizieren die wirklich das JDK betreffen!!!
+Dazu ist es ratsam sich ein aktuelles JavaFX SDK herunterzuladen und dieses dann (wie im unteren Befehl) mit einzubinden.
+
+jdeps --ignore-missing-deps --module-path C:\Users\Christian\Downloads\javafx-sdk-18.0.1\lib --add-modules=javafx.controls,javafx.fxml --list-deps SciFiDigitalClock-1.0.jar
+
+Hier ein Beispiel von Modulen aus dem JDK die zur Ausführung der Applikation benötigt werden:
+java.base
+java.compiler
+java.desktop
+java.logging
+java.management
+java.naming
+java.rmi
+java.scripting
+java.sql
+java.xml
+jdk.jfr
+jdk.unsupported
+
+Best Practise zur Erstellung eines Custom JDK:
+1.	Sind alle Module (Abhängigkeiten) via Jdeps identifiziert kann das Custom JDK mittels Jlink erstellt werden.
+2.	Nach erfolgreicher Erstellung sollte in das Custom JDK lib Verzeichnis navigiert werden und das betreffende JAR (also die Applikation)
+	einmal mit der im Custom JDK enthaltenen java.exe -jar ausgeführt werden
+3.	Kommt es zu keinen Fehlern ist das Custom JDK vollständig und die Applikation kann mit diesem deployed werden bzw. die JAR in eine EXE etc. konvertiert
+	werden.
+4.	Kommt es zu Fehlern bei der Ausführung, waren noch nicht alle notwendigen Module in das Custom JDK eingebunden. Nun sollte geprüft werden in welchen
+	Modulen sich die fehlenden Klassen befinden und diese Module noch zu den Modulen im Jlink Befehl dazu gebracht werden.
+	Eventuell muss diese Prozedur mehrmals wiederholt werden, bis alle Module eingebunden sind.
