@@ -53,7 +53,7 @@ public class DigitalClock {
 		Instant nowUTC = Instant.now();
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// get date time for the current using time zone
 		ZonedDateTime currentDateTime = ZonedDateTime.ofInstant(nowUTC, currentTimeZoneID);
@@ -71,7 +71,7 @@ public class DigitalClock {
 	public int getHours() {
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// get always a new instance of the Calendar object to get new time
 		this.calender = Calendar.getInstance();
@@ -92,7 +92,7 @@ public class DigitalClock {
 		Instant nowUTC = Instant.now();
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// get date time for the current using time zone
 		ZonedDateTime currentDateTime = ZonedDateTime.ofInstant(nowUTC, currentTimeZoneID);
@@ -109,7 +109,7 @@ public class DigitalClock {
 	public long getCurrentTimeShiftInHours() {
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// get current system time (from JVM)
 		LocalDateTime currentSystemTime = LocalDateTime.now();

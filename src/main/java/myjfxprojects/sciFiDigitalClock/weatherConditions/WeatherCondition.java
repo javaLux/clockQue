@@ -136,13 +136,13 @@ public class WeatherCondition {
 		
 		// convert each necessary time stamps to a LocalDateTime object to make compare easier
 		LocalDateTime currentDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(DataBean.currentUnixTimestampInSeconds),
-				TimeZone.getTimeZone(DataBean.currentTimeZone).toZoneId());
+				TimeZone.getTimeZone(DataBean.currentLocationTimeZone).toZoneId());
 		
 		LocalDateTime currentDaySunriseDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(DataBean.currentDaySunriseUnixTimestampInSeconds),
-				TimeZone.getTimeZone(DataBean.currentTimeZone).toZoneId()).plusMinutes(fifteenMinutes);
+				TimeZone.getTimeZone(DataBean.currentLocationTimeZone).toZoneId()).plusMinutes(fifteenMinutes);
 		
 		LocalDateTime currentDaySunsetDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(DataBean.currentDaySunsetUnixTimestampInSeconds),
-				TimeZone.getTimeZone(DataBean.currentTimeZone).toZoneId()).plusMinutes(fifteenMinutes);
+				TimeZone.getTimeZone(DataBean.currentLocationTimeZone).toZoneId()).plusMinutes(fifteenMinutes);
 		
 		// compare the date time objects
 		int beforeSunrise = currentDateTime.compareTo(currentDaySunriseDateTime);

@@ -145,7 +145,7 @@ public class DbHandling {
 	        	// IMPORTANT: save the default/Fallback location "Berlin" also in database
     			this.createNewLocation(this.dataBean.getDefaultLocation(), markAsCurrentActive);
     			// assigned to the fallback location Berlin the right time zone (default value is Europe/Berlin)
-    			this.setTimeZoneForThisLocation(this.dataBean.getDefaultLocation(), DataBean.DefaultTimeZone);
+    			this.setTimeZoneForThisLocation(this.dataBean.getDefaultLocation(), this.dataBean.getDefaultTimeZone());
     			
 				// write once the default settings values
 				this.createOnceTheDefaultSettingsValues();
@@ -342,8 +342,11 @@ public class DbHandling {
 				// store them in data bean as last selected location object
 				this.dataBean.setLastActiveLocationObject(locationObject);
 				
-				// set time zone of the last selected location to get the right date time
-				DataBean.currentTimeZone = locationItem.get(COLUMN_TIMEZONE, String.class);
+				// IMPORTANT:
+				// set time zone of the last selected location (or the default location)
+				// otherwise a exception will thrown because it is no time zone available
+				// to get the right date time (Class ControlDateInfos)
+				DataBean.currentLocationTimeZone = locationItem.get(COLUMN_TIMEZONE, String.class);
 			}
 		}
 	}

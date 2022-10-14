@@ -42,7 +42,7 @@ public class ControlDateInfos {
 	public String getCurrentDayOfWeek() {
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// use current locale from JVM to display day of week in current language
 		return LocalDate.now(currentTimeZoneID).getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
@@ -51,7 +51,7 @@ public class ControlDateInfos {
 	public String getCurrentMonth() {
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		
 		// use current locale from JVM to display month in current language
 		return LocalDate.now(currentTimeZoneID).getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
@@ -60,7 +60,7 @@ public class ControlDateInfos {
 	public int getCurrentDayOfMonth() {
 		
 		// create ZonID object with the current using time zone
-		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentTimeZone);
+		ZoneId currentTimeZoneID = ZoneId.of(DataBean.currentLocationTimeZone);
 		return LocalDate.now(currentTimeZoneID).getDayOfMonth();
 	}
 }

@@ -75,7 +75,6 @@ public class Weather {
 	private final String WEATHER_DESCRIPTION_KEY 	= "description";
 	
 	// fields for temperatureCurrent, weather condition id and weather description
-	private String currentLocationTimeZone	= "";
 	private String weatherConIconPath		= "";
 	private String weatherDescription 		= "";
 	private String temperatureCurrent 		= "";
@@ -193,14 +192,14 @@ public class Weather {
 		// event handler for the time line finished event
 		timeline.setOnFinished(event -> {
 			// if time line finished, than save time zone for the given location object in database
-			dataBean.getJooqDbApi().setTimeZoneForThisLocation(location, currentLocationTimeZone);
+			dataBean.getJooqDbApi().setTimeZoneForThisLocation(location, DataBean.currentLocationTimeZone);
 			// set new date info's dependent on the current active time zone
 			dataBean.getDigitalClockFXMLcontroller().setLblWeekDay(ControlDateInfos.getInstance().getCurrentDayOfWeek());
         	dataBean.getDigitalClockFXMLcontroller().setLblMonth(ControlDateInfos.getInstance().getCurrentMonth());
         	dataBean.getDigitalClockFXMLcontroller().setLblMonthDay(ControlDateInfos.getInstance().getCurrentDayOfMonth());
         	
         	// assigned the current time zone to the right label in the custom tool tip of the digital clock
-        	dataBean.getTimeZoneTooltip().setTimeZoneName(DataBean.currentTimeZone);
+        	dataBean.getTimeZoneTooltip().setTimeZoneName(DataBean.currentLocationTimeZone);
         	
 			// assigned the current time shift value to the right label in the custom tool tip of the digital clock
         	dataBean.getTimeZoneTooltip().setTimeShiftValue(DigitalClock.getInstance().getCurrentTimeShiftInHours());
@@ -253,12 +252,14 @@ public class Weather {
 					DataBean.isWaitingSymbolShowing = false;
 					DataBean.isErrorSymbolShowing = false;
 					
-					this.currentLocationTimeZone	= this.fetchLocationTimeZone();
-					this.temperatureCurrent 		= this.fetchCurrentTemp();
-					this.temperatureLowest 			= this.fetchDailyMinTemp();
-					this.temperatureHighest 		= this.fetchDailyMaxTemp();
-					this.dateTimeSunrise 			= this.fetchSunriseDateTime();
-					this.dateTimeSunSet 			= this.fetchSunsetDateTime();
+					// save periodically the current time zone in data bean to have access
+					// from outside to get the right date time
+					DataBean.currentLocationTimeZone	= this.fetchLocationTimeZone();
+					this.temperatureCurrent 			= this.fetchCurrentTemp();
+					this.temperatureLowest 				= this.fetchDailyMinTemp();
+					this.temperatureHighest 			= this.fetchDailyMaxTemp();
+					this.dateTimeSunrise 				= this.fetchSunriseDateTime();
+					this.dateTimeSunSet 				= this.fetchSunsetDateTime();
 					
 					// save periodically current sunset and sunrise date time in dataBean
 					DataBean.dateTimeSunset = this.dateTimeSunSet;
@@ -268,9 +269,6 @@ public class Weather {
 					DataBean.currentUnixTimestampInSeconds = this.fetchCurrentDayTimeStamp(CURRENT_TIMESTAMP);
 					DataBean.currentDaySunriseUnixTimestampInSeconds = this.fetchCurrentDayTimeStamp(SUNRISE_TIMESTAMP);
 					DataBean.currentDaySunsetUnixTimestampInSeconds = this.fetchCurrentDayTimeStamp(SUNSET_TIMESTAMP);
-					
-					// save periodically the current time zone in data bean to have access from outside to get the right date time
-					DataBean.currentTimeZone = this.currentLocationTimeZone;
 					
 					this.weatherDescription = this.fetchWeatherDescription();
 					// get matching weather icon
@@ -296,16 +294,6 @@ public class Weather {
 					// set values for current highest and lowest temperature tool tip
 					this.tempIconToolTip.setMinMaxTempValue(this.temperatureLowest, this.temperatureHighest);
 					
-//					System.out.println("\nTimezone           : " + this.currentLocationTimeZone);
-//					System.out.println("Sunrise            : " + this.dateTimeSunrise);
-//					System.out.println("Sunrise next day   : " + this.fetchNextDaySunrise());
-//					System.out.println("Sunset             : " + this.dateTimeSunSet);
-//					System.out.println("Temp current       : " + this.temperatureCurrent);
-//					System.out.println("Temp min           : " + this.temperatureLowest);
-//					System.out.println("Temp max           : " + this.temperatureHighest);
-//					System.out.println("Weather ID         : " + this.fetchWeatherConID());
-//					System.out.println("Weather icon       : " + this.weatherConIconPath);
-//					System.out.println("Weather Description: " + this.weatherDescription + "\n");
 				}
 				
 				// if no weather data available
@@ -569,7 +557,7 @@ public class Weather {
 					
 					// we must convert seconds in milliseconds to get the correct time
 					dateTimeOfSunrise = OwnDateTimeFormatter.formatTime(TimeUnit.SECONDS.toMillis(longValue),
-							this.currentLocationTimeZone);
+							DataBean.currentLocationTimeZone);
 					
 				} catch (Exception ex) {
 					LOGGER.error("Failed to convert the current date time of sunrise.\nTime stamp: '" +
@@ -599,7 +587,7 @@ public class Weather {
 					
 					// we must convert seconds in milliseconds to get the correct time
 					dateTimeOfSunset = OwnDateTimeFormatter.formatTime(TimeUnit.SECONDS.toMillis(longValue),
-							this.currentLocationTimeZone);
+							DataBean.currentLocationTimeZone);
 					
 				} catch (Exception ex) {
 					LOGGER.error("Failed to convert the current date time of sunset.\nTime stamp: '" +

@@ -130,10 +130,10 @@ public class DataBean {
 	
 	// current Time zone dependent on the current active location
 	// (by default the time zone is Europe/Berlin, because the fall back location is Berlin)
-	public static String currentTimeZone = "";
+	public static String currentLocationTimeZone = "";
 	
 	// default time zone dependent on the default fallback location Berlin
-	public static final String DefaultTimeZone = "Europe/Berlin";
+	private final String defaultTimeZone = "Europe/Berlin";
 	
 	// define the width for main window and VBox middle to resize these if
 	// arrow button will clicked
@@ -156,7 +156,7 @@ public class DataBean {
 	private Set<LocationObject> userLocations = new HashSet<LocationObject>();
 	
 	// default location object
-	private final LocationObject DEFAULT_LOCATION = LocationObjectBuilder.getInstance()
+	private final LocationObject defaultLocation = LocationObjectBuilder.getInstance()
 			.withFullLocationName("Berlin (Berlin) [Deutschland]")
 			.withReducedLocationName("Berlin [DE]")
 			.withLatitude("52.52437")
@@ -408,7 +408,7 @@ public class DataBean {
 	 * @return the DEFAULT_LOCATION object
 	 */
 	public LocationObject getDefaultLocation() {
-		return DEFAULT_LOCATION;
+		return this.defaultLocation;
 	}
 
 	/**
@@ -424,7 +424,14 @@ public class DataBean {
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-
+	
+	/**
+	 * @return the default time zone
+	 */
+	public String getDefaultTimeZone() {
+		return this.defaultTimeZone;
+	}
+	
 	/**
 	 * @return the lastActiveLocationObject
 	 */
