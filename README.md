@@ -3,7 +3,7 @@
 This is the Non modulare variant of this project.
 
 SciFiDigitalClock is an Application who united two features. First a World Clock and second a Weather Data App.
-It is possible to search for locations all over the world, and if you found an interested Place than choose them and you will see the current time and specific weather data for your cuurent choosed location. Farther the time shift from your real location to your choosen location will also display.
+It is possible to search for locations all over the world, and if you found an interested Place than choose them and you will see the current time and specific weather data for your current choosed location. Farther the time shift from your real location to your choosen location will also display.
 
 # TODO
 * check database entries on start up, to verify the location and settings values
