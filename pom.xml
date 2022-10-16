@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>myjfxprojects</groupId>
 	<artifactId>SciFiDigitalClock</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 	<name>ClockQue</name>
 	<properties>
@@ -14,8 +14,8 @@
 		<maven.compiler.target>${project.java.version}</maven.compiler.target>
 		<maven.compiler.encoding>${project.build.sourceEncoding}</maven.compiler.encoding>
 		<maven.resources.encoding>${project.build.sourceEncoding}</maven.resources.encoding>
-		<openJfxVersion>18.0.1</openJfxVersion>
-		<fileVersionForExe>1.0.0.0</fileVersionForExe>
+		<openJfxVersion>19</openJfxVersion>
+		<fileVersionForExe>1.0.0.1</fileVersionForExe>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -28,60 +28,41 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>${openJfxVersion}</version>
 		</dependency>
-		<!-- Cross-platform dependencies for the windows platform -->
+		<!-- Cross-platform dependencies for the windows platform
+		(apply 'mac' for MacOsX or 'linux' for Unix platforms-->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
 			<version>${openJfxVersion}</version>
 			<classifier>win</classifier>
 		</dependency>
-
-		<!--
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<version>${openJfxVersion}</version>
-			<classifier>linux</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<version>${openJfxVersion}</version>
-			<classifier>mac</classifier>
-		</dependency>
-		-->
-
+		
 		<!--This are IMPORTANT dependencies, because the JOOQ Frame work, supports this slf4j implementation of Log4j
 			as the default LOGGER. So we must not implements a seperate LOGGER for JOOQ
 		-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.17.2</version>
+			<version>2.19.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.36</version>
-		</dependency>
-
+		
 		<!-- Jackson frame work to convert and handle JSON-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4.2</version>
 		</dependency>
 		<!-- Java Database Connectivity for SQlite-->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.36.0.3</version>
+			<version>3.39.3.0</version>
 		</dependency>
 		<!-- JOOQ frame work to talk with the database -->
 		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
-			<version>3.16.6</version>
+			<version>3.17.4</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -95,7 +76,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -142,7 +123,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -230,7 +211,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.2</version>
 				<executions>
 					<execution>
 						<!-- Bundle the .exe and the custom JDK into a final ZIP archive -->
