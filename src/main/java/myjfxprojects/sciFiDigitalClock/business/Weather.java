@@ -53,10 +53,10 @@ public class Weather {
 	private final double durationWeatherTimeline = 4.0;
 
 	// weather data currently not available
-	private final String dataNotAvailableText = "Wetterdaten aktuell nicht verfügbar...";
+	private final String dataNotAvailableText = "No weather data currently available.\nTry again later.";
 
 	// error by query the current weather data from server
-	private final String errorByFetchingWeatherDataText = "Fehler beim abrufen der aktuellen Wetterdaten.\nDer Server antwortet nicht.";
+	private final String errorByFetchingWeatherDataText = "Error getting current weather data.\nNo response from server.";
 
 	// map keys to find weather data from map
 	private final String TIME_ZONE_KEY 				= "timezone";
