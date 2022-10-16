@@ -27,6 +27,18 @@
 			<directory>${project.basedir}/customJDK-18.0.1.1</directory>
 			<outputDirectory>lib/customJDK-18.0.1.1</outputDirectory>
 		</fileSet>
+		
+		<!-- Copy maven dependencies to libs folder in ZIP archive -->
+		<fileSet>
+			<directory>${project.build.directory}/lib/</directory>
+			<outputDirectory>lib/</outputDirectory>
+		</fileSet>
+		
+		<!-- Copy app resources to resources folder in ZIP archive -->
+		<fileSet>
+			<directory>${project.build.directory}/resources/</directory>
+			<outputDirectory>/resources</outputDirectory>
+		</fileSet>
 	</fileSets>
 
 	<files>
