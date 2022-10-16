@@ -8,14 +8,12 @@
 		<format>zip</format>
 	</formats>
 	<fileSets>
-
-		<!-- Add the .exe from target folder to the ZIP -->
 		<fileSet>
 			<directory>${project.build.directory}</directory>
-			<!-- store the exe file in root directory of ZIP archive -->
-			<outputDirectory />
+			<!-- store the JAR file in root directory of ZIP archive -->
+			<outputDirectory>.</outputDirectory>
 			<includes>
-				<include>${project.name}.exe</include>
+				<include>${project.name}-${project.version}.jar</include>
 			</includes>
 		</fileSet>
 
@@ -24,8 +22,8 @@
 		<fileSet>
 			<!-- In this case we add a custom JDK with specific modules from the system 
 				JDK, that has the advantage the size of the JRE is very smaller -->
-			<directory>${project.basedir}/customJDK-18.0.1.1</directory>
-			<outputDirectory>lib/customJDK-18.0.1.1</outputDirectory>
+			<directory>${project.basedir}/customJDK-18-ubuntu</directory>
+			<outputDirectory>lib/customJDK-18-ubuntu</outputDirectory>
 		</fileSet>
 		
 		<!-- Copy maven dependencies to libs folder in ZIP archive -->
@@ -44,7 +42,7 @@
 	<files>
 		<!-- Add README to ZIP archive -->
 		<file>
-			<source>${project.basedir}/README.txt</source>
+			<source>${project.basedir}/ReadMe.txt</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<!-- Add license file to the ZIP archive -->

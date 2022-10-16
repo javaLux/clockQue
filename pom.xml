@@ -34,7 +34,7 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
 			<version>${openJfxVersion}</version>
-			<classifier>win</classifier>
+			<classifier>linux</classifier>
 		</dependency>
 		
 		<!--This are IMPORTANT dependencies, because the JOOQ Frame work, supports this slf4j implementation of Log4j
@@ -137,74 +137,9 @@
 							<Class-Path>.</Class-Path>
 						</manifestEntries>
 					</archive>
-					<finalName>${project.artifactId}-${project.version}</finalName>
+					<finalName>${project.name}-${project.version}</finalName>
 					<!-- <outputDirectory>${project.build.directory}/${project.artifactId}</outputDirectory> -->
 				</configuration>
-			</plugin>
-
-			<!-- Plugin to wrap the JAR file in a EXE File -->
-			<plugin>
-				<groupId>com.akathist.maven.plugins.launch4j</groupId>
-				<artifactId>launch4j-maven-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-						<id>l4j-clui</id>
-						<phase>package</phase>
-						<goals>
-							<goal>launch4j</goal>
-						</goals>
-						<configuration>
-							<headerType>gui</headerType>
-							<jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
-							<outfile>${project.build.directory}/${project.name}.exe</outfile>
-							<downloadUrl>https://jdk.java.net/archive/</downloadUrl>
-							<classPath>
-								<mainClass>myjfxprojects.sciFiDigitalClock.main.SuperMain</mainClass>
-								<preCp>anything</preCp>
-							</classPath>
-							<icon>${project.basedir}/conf/application.ico</icon>
-							<errTitle>${project.name} Failed to execute</errTitle>
-
-							<jre>
-								<minVersion>18</minVersion>
-								<jdkPreference>jdkOnly</jdkPreference>
-
-								<!-- Relative path to the custom JDK for launching the exe -->
-								<path>./lib/customJDK-18.0.1.1</path>
-								<opts>
-									<!-- This is an IMPORTANT JVM option, to use always UTF-8 encoding at runtime -->
-									<opt>-Dfile.encoding=UTF-8</opt>
-									<!-- Set module path and the required JavaFX modules for this application to the JVM -->
-									<opt>--module-path .\lib --add-modules javafx.controls,javafx.fxml</opt>
-								</opts>
-							</jre>
-
-							<splash>
-								<!-- Set the splash screen image, only BMP files with 24 bit color depth are allowed -->
-								<file>${project.basedir}/conf/javafxSplash.bmp</file>
-								<!-- set show duration time out in seconds -->
-								<timeout>20</timeout>
-								<!-- splash screen waits until application is running -->
-								<waitForWindow>true</waitForWindow>
-							</splash>
-
-							<versionInfo>
-								<fileVersion>${fileVersionForExe}</fileVersion>
-								<txtFileVersion>${fileVersionForExe}</txtFileVersion>
-								<fileDescription>${project.name}</fileDescription>
-								<copyright>2022 openjfx.io</copyright>
-								<productVersion>${fileVersionForExe}</productVersion>
-								<txtProductVersion>${fileVersionForExe}</txtProductVersion>
-								<productName>${project.name}</productName>
-								<companyName>FunWithJavaFX</companyName>
-								<internalName>${project.artifactId}</internalName>
-								<originalFilename>${project.name}.exe</originalFilename>
-								<language>GERMAN</language>
-							</versionInfo>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<!-- Plugin to handle the final deployment of this application -->
