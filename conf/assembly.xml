@@ -1,7 +1,4 @@
-<assembly
-	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 	<id>zip</id>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<formats>
@@ -25,13 +22,13 @@
 			<directory>${project.basedir}/customJDK-18-ubuntu</directory>
 			<outputDirectory>lib/customJDK-18-ubuntu</outputDirectory>
 		</fileSet>
-		
+
 		<!-- Copy maven dependencies to libs folder in ZIP archive -->
 		<fileSet>
 			<directory>${project.build.directory}/lib/</directory>
 			<outputDirectory>lib/</outputDirectory>
 		</fileSet>
-		
+
 		<!-- Copy app resources to resources folder in ZIP archive -->
 		<fileSet>
 			<directory>${project.build.directory}/resources/</directory>
@@ -40,6 +37,11 @@
 	</fileSets>
 
 	<files>
+		<!-- Add Shell script for launching this application to ZIP archive -->
+		<file>
+			<source>${project.basedir}/launchClockQue.sh</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
 		<!-- Add README to ZIP archive -->
 		<file>
 			<source>${project.basedir}/ReadMe.txt</source>

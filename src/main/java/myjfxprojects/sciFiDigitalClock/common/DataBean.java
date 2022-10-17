@@ -100,7 +100,7 @@ public class DataBean {
 	
 	// start fields for API call
 	// you have to specify your own API Key from openweathermap.org
-	private final String API_KEY 			= "4e6161f023294524c45ffe1aa3788527";
+	private final String API_KEY 			= "";
 	private final String API_WEATHER_URL	= "https://api.openweathermap.org/data/2.5/onecall?";
 	private final String API_LOCATION_URL	= "http://api.openweathermap.org/geo/1.0/direct?q=";
 	
