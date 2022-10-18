@@ -10,7 +10,7 @@ SciFiDigitalClock is an Application who united two features. First a World Clock
 
 Used JDK
 
-    OpenJDK Version 18.0.1.1
+    OpenJDK Version 18.0.2
 
 Used Frameworks
 
