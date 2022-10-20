@@ -15,7 +15,6 @@
 		<maven.compiler.encoding>${project.build.sourceEncoding}</maven.compiler.encoding>
 		<maven.resources.encoding>${project.build.sourceEncoding}</maven.resources.encoding>
 		<openJfxVersion>19</openJfxVersion>
-		<fileVersionForExe>1.0.0.1</fileVersionForExe>
 	</properties>
 	<dependencies>
 		<dependency>
