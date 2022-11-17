@@ -14,9 +14,9 @@ It is possible to search for locations all over the world, and if you found an i
 ## Used Frameworks
     * OpenJfx               Version 19
     * Apache Log4J (SLF4j)  Version 2.19.0
-    * Jackson Databind      Version 2.13.4.2
+    * Jackson Databind      Version 2.14.0
     * JDBC (SQlite)         Version 3.39.3.0
-    * JOOQ                  Version 3.17.4
+    * JOOQ                  Version 3.17.5
 
 ## Used Build Tool
     * Apache Maven          Version 3.8.6
