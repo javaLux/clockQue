@@ -17,6 +17,11 @@ local.properties
 .settings/
 .loadpath
 
+# IntelliJ specific git ignore
+.idea
+.idea_modules/
+out/
+
 # Log file
 *.log
 
