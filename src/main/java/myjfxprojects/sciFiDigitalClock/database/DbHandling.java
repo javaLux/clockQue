@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 
+import myjfxprojects.sciFiDigitalClock.common.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -22,12 +23,6 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.SQLDataType;
 import org.slf4j.Logger;
 
-import myjfxprojects.sciFiDigitalClock.common.ApplicationLogger;
-import myjfxprojects.sciFiDigitalClock.common.DataBean;
-import myjfxprojects.sciFiDigitalClock.common.DisplayDimension;
-import myjfxprojects.sciFiDigitalClock.common.ETempUnits;
-import myjfxprojects.sciFiDigitalClock.common.ErrorBoxSwing;
-import myjfxprojects.sciFiDigitalClock.common.InternetConn;
 import myjfxprojects.sciFiDigitalClock.location.HandleLocationName;
 import myjfxprojects.sciFiDigitalClock.location.LocationObject;
 import myjfxprojects.sciFiDigitalClock.location.LocationObjectBuilder;
@@ -36,7 +31,7 @@ import myjfxprojects.sciFiDigitalClock.location.LocationObjectBuilder;
  * @author Christian
  *
  *         Class handles all the database access with the JOOQ Framework. This
- *         Framework is for manage and execute SQL commands in an easy way and
+ *         Framework is for manage and execute SQL commands in an easy way, and
  *         it wrapped the SQL commands so that these can be used like a good old
  *         java object.
  */
@@ -71,6 +66,7 @@ public class DbHandling {
 	private final String COLUMN_TEMP_UNIT;
 	private final String COLUMN_MAIN_X_POS;
 	private final String COLUMN_MAIN_Y_POS;
+	private final String COLUMN_SCREENS;
 	
 	// field for database connection
 	private Connection dbConnection = null;
@@ -78,7 +74,7 @@ public class DbHandling {
 	// field for the JOOQ SQL executer
 	private DSLContext sqlContext = null;
 	
-	// boolean the specify a location as last selected
+	// boolean that specify a location as last selected
 	private final boolean markAsCurrentActive = true;
 	
 	
@@ -106,6 +102,7 @@ public class DbHandling {
 		this.COLUMN_TEMP_UNIT			= "tempUnit";
 		this.COLUMN_MAIN_X_POS			= "xPos";
 		this.COLUMN_MAIN_Y_POS			= "yPos";
+		this.COLUMN_SCREENS				= "screens";
 	}
 	
 	/**
@@ -219,6 +216,7 @@ public class DbHandling {
 					.column(COLUMN_TEMP_UNIT, SQLDataType.CHAR)
 					.column(COLUMN_MAIN_X_POS, SQLDataType.FLOAT)
 					.column(COLUMN_MAIN_Y_POS, SQLDataType.FLOAT)
+					.column(COLUMN_SCREENS, SQLDataType.DECIMAL)
 					.execute();
 		}
 	}
@@ -268,13 +266,22 @@ public class DbHandling {
 			String defaultTempUnit 		= "METRIC";
 			
 			// use default values (from current display dimension) to center main window on screen
-			double defaultXPosMainWindow = (DisplayDimension.getScreenWidth() / 2) - 120;
-			double defaultYPosMainWindow = (DisplayDimension.getScreenHeight() / 2) - 60;
+			double defaultXPosMainWindow = (ScreenConfig.getWidthOfPrimaryScreen() / 2) - 120;
+			double defaultYPosMainWindow = (ScreenConfig.getHeightOfPrimaryScreen() / 2) - 60;
 			
-			this.sqlContext.insertInto(table(TABLE_SETTINGS), field(COLUMN_PROXY_ENABLED), field(COLUMN_VBOX_MIDDLE_STATE), field(COLUMN_PROXY_NAME),
-					field(COLUMN_PROXY_PORT), field(COLUMN_TEMP_UNIT), field(COLUMN_MAIN_X_POS), field(COLUMN_MAIN_Y_POS))
-					.values(proxyDisabled, vBoxMidleMinimize, proxyNameEmpty, proxyPortEmpty, defaultTempUnit, defaultXPosMainWindow, defaultYPosMainWindow)
-					.execute();
+			this.sqlContext.insertInto(table(TABLE_SETTINGS),
+							field(COLUMN_PROXY_ENABLED),
+							field(COLUMN_VBOX_MIDDLE_STATE),
+							field(COLUMN_PROXY_NAME),
+							field(COLUMN_PROXY_PORT),
+							field(COLUMN_TEMP_UNIT),
+							field(COLUMN_MAIN_X_POS),
+							field(COLUMN_MAIN_Y_POS),
+							field(COLUMN_SCREENS))
+							.values(proxyDisabled, vBoxMidleMinimize, proxyNameEmpty, proxyPortEmpty,
+									defaultTempUnit, defaultXPosMainWindow, defaultYPosMainWindow,
+									ScreenConfig.getAvailableScreens())
+							.execute();
 		}
 	}
 	
@@ -292,7 +299,7 @@ public class DbHandling {
 				
 				result.forEach(locationItem -> {
 					
-					// build with infos's from database a new location object
+					// build with info's from database a new location object
 					LocationObject locationObject = LocationObjectBuilder.getInstance()
 											.withFullLocationName(locationItem.get(COLUMN_CITY_NAME, String.class))
 											.withLatitude(locationItem.get(COLUMN_LATITUDE, String.class))
@@ -315,7 +322,6 @@ public class DbHandling {
 	 * Method find the last selected location item in database and store them in data bean
 	 * as last selected location object. Farther the method set the time zone of the last selected location
 	 * in data bean.
-	 * @throws SQLException 
 	 */
 	private void getLastSelectedLocation() {
 		
@@ -344,7 +350,7 @@ public class DbHandling {
 				
 				// IMPORTANT:
 				// set time zone of the last selected location (or the default location)
-				// otherwise a exception will thrown because it is no time zone available
+				// otherwise an exception will throw because it is no time zone available
 				// to get the right date time (Class ControlDateInfos)
 				DataBean.currentLocationTimeZone = locationItem.get(COLUMN_TIMEZONE, String.class);
 			}
@@ -368,26 +374,19 @@ public class DbHandling {
 				
 				// first:	set the right temperature unit (like METRIC= °C or IMPERIAL= °F)
 				String currentTempUnit = appSettings.get(COLUMN_TEMP_UNIT, String.class);
-				
-				switch (currentTempUnit) {
-				case "METRIC":
-					this.dataBean.setCurrentTempUnit(ETempUnits.METRIC);
-					break;
-					
-				case "IMPERIAL":
+
+				if ("IMPERIAL".equals(currentTempUnit)) {
 					this.dataBean.setCurrentTempUnit(ETempUnits.IMPERIAL);
-					break;
 
 					// if no value from database matched -> default is METRIC(°C)
-				default:
+				} else {
 					this.dataBean.setCurrentTempUnit(ETempUnits.METRIC);
-					break;
 				}
 				
-				// second:	set the state of VBox Middle is minimize or not
+				// second:	set the state of VBox Middle is minimized or not
 				DataBean.isVBoxMiddleMinimize = appSettings.get(COLUMN_VBOX_MIDDLE_STATE, Boolean.class);
 				
-				// third:	set the right value for proxy using -> this value decides whenever the check box is activated or not
+				// third:	set the right value for proxy using -> this value decides whenever the checkbox is activated or not
 				DataBean.isProxyEnabled = appSettings.get(COLUMN_PROXY_ENABLED, Boolean.class);
 				
 				// fourth:	get proxy settings from database
@@ -413,13 +412,21 @@ public class DbHandling {
 				this.dataBean.setProxyName(proxyName);
 				this.dataBean.setProxyPort(proxyPort);
 				
-				// seventh:	save the x and y position for the main window in the data bean
-				DataBean.current_X_Pos_MainWindow = appSettings.get(COLUMN_MAIN_X_POS, Float.class);
-				DataBean.current_Y_Pos_MainWindow = appSettings.get(COLUMN_MAIN_Y_POS, Float.class);
+				// seventh:	check the number of available screens and set the main window position dependent on it
+				int numberOfScreens = appSettings.get(COLUMN_SCREENS, Integer.class);
+
+				if(numberOfScreens != ScreenConfig.getAvailableScreens()) {
+					DataBean.current_X_Pos_MainWindow = (ScreenConfig.getWidthOfPrimaryScreen() / 2) - 120;
+					DataBean.current_Y_Pos_MainWindow = (ScreenConfig.getHeightOfPrimaryScreen() / 2) - 60;
+
+				}else {
+					DataBean.current_X_Pos_MainWindow = appSettings.get(COLUMN_MAIN_X_POS, Float.class);
+					DataBean.current_Y_Pos_MainWindow = appSettings.get(COLUMN_MAIN_Y_POS, Float.class);
+				}
 			}
 			else {
 				
-				LOGGER.warn("No application settings available from SQlite database. Because result is empty.\nResult: " + result);
+				LOGGER.warn("No application settings available from SQLite database. Because result is empty.\nResult: " + result);
 			}
 		}
 	}
@@ -499,6 +506,7 @@ public class DbHandling {
 					.set(field(COLUMN_TEMP_UNIT), this.dataBean.getSettingsViewApp().getToggleGroup().getSelectedToggle().getUserData().toString())
 					.set(field(COLUMN_MAIN_X_POS), DataBean.current_X_Pos_MainWindow)
 					.set(field(COLUMN_MAIN_Y_POS), DataBean.current_Y_Pos_MainWindow)
+					.set(field(COLUMN_SCREENS), ScreenConfig.getAvailableScreens())
 					.execute();
 		}
 	}

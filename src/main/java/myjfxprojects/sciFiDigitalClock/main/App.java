@@ -2,6 +2,7 @@ package myjfxprojects.sciFiDigitalClock.main;
 
 import javax.swing.ImageIcon;
 
+import myjfxprojects.sciFiDigitalClock.common.*;
 import org.slf4j.Logger;
 
 import javafx.application.Application;
@@ -22,12 +23,6 @@ import myjfxprojects.sciFiDigitalClock.business.ControlMinuteHand;
 import myjfxprojects.sciFiDigitalClock.business.ManageVBoxMiddle;
 import myjfxprojects.sciFiDigitalClock.business.SettingsViewApp;
 import myjfxprojects.sciFiDigitalClock.business.Weather;
-import myjfxprojects.sciFiDigitalClock.common.ApplicationLogger;
-import myjfxprojects.sciFiDigitalClock.common.DataBean;
-import myjfxprojects.sciFiDigitalClock.common.ErrorBoxSwing;
-import myjfxprojects.sciFiDigitalClock.common.FxmlUtil;
-import myjfxprojects.sciFiDigitalClock.common.InternetConn;
-import myjfxprojects.sciFiDigitalClock.common.UndecoratedWindow;
 import myjfxprojects.sciFiDigitalClock.customTooltip.TimeZoneTooltip;
 import myjfxprojects.sciFiDigitalClock.database.DbDirectory;
 import myjfxprojects.sciFiDigitalClock.database.DbHandling;
@@ -57,13 +52,13 @@ public class App extends Application {
 			// application
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
 					"Failed to create the database directory\n'" + DbDirectory.DB_DIR.getAbsolutePath() + "'"
-							+ "\nApplication will closed. For more informations, see the log file.",
+							+ "\nApplication will closed. For more information's, see the log file.",
 					new ImageIcon("src/main/resources/images/wheelChair.png"));
 
 			System.exit(1);
 		}
 
-		// initialize a new API instance to speak with the SQlite database and store
+		// initialize a new API instance to speak with the SQLite database and store
 		// them in data bean
 		this.dataBean.setJooqDbApi(new DbHandling());
 
@@ -74,7 +69,7 @@ public class App extends Application {
 			// application
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
 					"Failed to established a connection to the database\n"
-							+ "Application will closed. For more informations, see the log file.",
+							+ "Application will closed. For more information's, see the log file.",
 					new ImageIcon("src/main/resources/images/wheelChair.png"));
 
 			System.exit(1);
@@ -101,8 +96,8 @@ public class App extends Application {
 			LOGGER.error("Failed to execute the scheduled service 'SCHEDULED_SERVICE_INTERNET_CONN' ", ex);
 
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
-					"Failed to execute the schedulded service to check the Internet connectivity\n"
-							+ "Application will closed. For more informations, see the log file.",
+					"Failed to execute the scheduled service to check the Internet connectivity\n"
+							+ "Application will closed. For more information's, see the log file.",
 					new ImageIcon("src/main/resources/images/wheelChair.png"));
 
 			System.exit(1);
@@ -116,7 +111,7 @@ public class App extends Application {
 		// FXML Util class object
 		FxmlUtil fxmlUtil = new FxmlUtil();
 
-		// load FXML file to root layout container with self made
+		// load FXML file to root layout container with self-made
 		// FxmlUtil class
 		this.root = fxmlUtil.loadFxmlFile("/fxml/ClockView.fxml");
 
@@ -124,7 +119,7 @@ public class App extends Application {
 		if (this.root != null) {
 
 			// if it was possible to get locations from database than run the APP
-			// i.e the database has no location entries than give user info and stop the APP
+			// e.g. the database has no location entries than give user info and stop the APP
 			if (! this.dataBean.getUserLocationsSet().isEmpty()) {
 
 				// initialize and save application class for the location list view in data bean
@@ -180,7 +175,7 @@ public class App extends Application {
 				primaryStage.xProperty().addListener(new primaryStagePosListener());
 				primaryStage.yProperty().addListener(new primaryStagePosListener());
 
-				// set once current date informations
+				// set once current date information
 				this.dataBean.getDigitalClockFXMLcontroller()
 						.setLblWeekDay(ControlDateInfos.getInstance().getCurrentDayOfWeek());
 				this.dataBean.getDigitalClockFXMLcontroller()
@@ -202,7 +197,7 @@ public class App extends Application {
 				undecoratedWindow.allowDragAndDrop(root, primaryStage);
 
 				// initialize the custom time zone tool tip for the digital clock
-				// the constructor of this tool tip will be save the instance in the data bean
+				// the constructor of this tool tip will be stored the instance in the data bean
 				new TimeZoneTooltip();
 
 				// start animation of digital clock, hour and minute hand
@@ -220,7 +215,7 @@ public class App extends Application {
 				this.dataBean.setCustomComboBox(new CustomComboBox());
 
 				// Add event filter to handle close event for the primary stage
-				// IMPORTANT: if main window will closed from task bar -> than close the
+				// IMPORTANT: if main window will be closed from task bar -> than close the
 				// complete application with all opened windows
 				primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
 
@@ -241,7 +236,7 @@ public class App extends Application {
 	}
 
 	/**
-	 * Method writes the current application settings in the SQlite database.
+	 * Method writes the current application settings in the SQLite database.
 	 */
 	@Override
 	public void stop() {
@@ -267,7 +262,7 @@ public class App extends Application {
 			DataBean.current_X_Pos_MainWindow = dataBean.getPrimaryStage().getX();
 			DataBean.current_Y_Pos_MainWindow = dataBean.getPrimaryStage().getY();
 
-			// replace the list view stage if primary stage will moved on desktop
+			// replace the list view stage if primary stage will be moved on desktop
 			if ((dataBean.getListViewStage() != null) && (dataBean.getListViewStage().isShowing())) {
 
 				dataBean.getListViewStage().getScene().getWindow().setX(DataBean.current_X_Pos_MainWindow);
