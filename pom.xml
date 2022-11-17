@@ -37,8 +37,8 @@
 			<classifier>win</classifier>
 		</dependency>
 		
-		<!--This are IMPORTANT dependencies, because the JOOQ Frame work, supports this slf4j implementation of Log4j
-			as the default LOGGER. So we must not implements a seperate LOGGER for JOOQ
+		<!--This is a IMPORTANT dependencies, because the JOOQ Frame work, supports this SLF4J implementation of Log4j
+			as the default LOGGER. So we must not implement a separate LOGGER for JOOQ
 		-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -46,11 +46,11 @@
 			<version>2.19.0</version>
 		</dependency>
 		
-		<!-- Jackson frame work to convert and handle JSON-->
+		<!-- Jackson framework to convert and handle JSON-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.4.2</version>
+			<version>2.14.0</version>
 		</dependency>
 		<!-- Java Database Connectivity for SQlite-->
 		<dependency>
@@ -58,11 +58,11 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.39.3.0</version>
 		</dependency>
-		<!-- JOOQ frame work to talk with the database -->
+		<!-- JOOQ framework to talk with the database -->
 		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
-			<version>3.17.4</version>
+			<version>3.17.5</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -142,7 +142,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Plugin to wrap the JAR file in a EXE File -->
+			<!-- Plugin to wrap the JAR file in an executable File -->
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
