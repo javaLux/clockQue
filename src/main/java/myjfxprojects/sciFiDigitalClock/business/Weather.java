@@ -48,7 +48,7 @@ public class Weather {
 	// Map holds the weather data from API call
 	private Map<String, Object> mapWeatherData = null;
 
-	// define weather data time line duration to four minutes
+	// define weather data timeline duration to four minutes
 	// IMPORTANT: because only 1000 API calls per day are allowed
 	private final double durationWeatherTimeline = 4.0;
 
@@ -256,6 +256,7 @@ public class Weather {
 			} catch (IOException ex) {
 				
 				LOGGER.error("Failed to get weather data from API.\nPossible reason:\n- wrong or empty API key\n"
+						+ "Current API key: '" + this.dataBean.getApiKey() + "'\n"
 						+ "API URL: '" + this.dataBean.getAPI_WEATHER_URL() + "'\n" 
 						+ "API response string:\n" + jsonResponseString, ex);
 				

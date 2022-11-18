@@ -1,0 +1,3 @@
+# set behind the colon your API key from the https://home.openweathermap.org/
+# e.g. apikey: <Token>
+apikey: write your api key here

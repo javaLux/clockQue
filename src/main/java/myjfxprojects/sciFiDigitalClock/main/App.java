@@ -1,10 +1,5 @@
 package myjfxprojects.sciFiDigitalClock.main;
 
-import javax.swing.ImageIcon;
-
-import myjfxprojects.sciFiDigitalClock.common.*;
-import org.slf4j.Logger;
-
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -16,18 +11,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import myjfxprojects.sciFiDigitalClock.business.ControlDateInfos;
-import myjfxprojects.sciFiDigitalClock.business.ControlDigitalClock;
-import myjfxprojects.sciFiDigitalClock.business.ControlHourHand;
-import myjfxprojects.sciFiDigitalClock.business.ControlMinuteHand;
-import myjfxprojects.sciFiDigitalClock.business.ManageVBoxMiddle;
-import myjfxprojects.sciFiDigitalClock.business.SettingsViewApp;
-import myjfxprojects.sciFiDigitalClock.business.Weather;
+import myjfxprojects.sciFiDigitalClock.business.*;
+import myjfxprojects.sciFiDigitalClock.common.*;
 import myjfxprojects.sciFiDigitalClock.customTooltip.TimeZoneTooltip;
 import myjfxprojects.sciFiDigitalClock.database.DbDirectory;
 import myjfxprojects.sciFiDigitalClock.database.DbHandling;
 import myjfxprojects.sciFiDigitalClock.location.CustomComboBox;
 import myjfxprojects.sciFiDigitalClock.location.LocationListViewApp;
+import org.slf4j.Logger;
+
+import javax.swing.*;
 
 /**
  * JavaFX APP
@@ -36,6 +29,8 @@ public class App extends Application {
 
 	// initialize data bean singleton
 	private DataBean dataBean = DataBean.getInstance();
+
+	private final String pathToWheelChairIcon = "resources/images/wheelChair.png";
 
 	// root layout manager
 	private Parent root = null;
@@ -47,13 +42,13 @@ public class App extends Application {
 		Logger LOGGER = ApplicationLogger.getAppLogger();
 
 		// create (if not exists) the database directory
-		if (!DbDirectory.createDbDirectory()) {
+		if (! DbDirectory.createDbDirectory()) {
 			// if failed to create database dir -> show error msg box and shutdown
 			// application
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
 					"Failed to create the database directory\n'" + DbDirectory.DB_DIR.getAbsolutePath() + "'"
 							+ "\nApplication will closed. For more information's, see the log file.",
-					new ImageIcon("src/main/resources/images/wheelChair.png"));
+					new ImageIcon(pathToWheelChairIcon));
 
 			System.exit(1);
 		}
@@ -70,7 +65,7 @@ public class App extends Application {
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
 					"Failed to established a connection to the database\n"
 							+ "Application will closed. For more information's, see the log file.",
-					new ImageIcon("src/main/resources/images/wheelChair.png"));
+					new ImageIcon(pathToWheelChairIcon));
 
 			System.exit(1);
 
@@ -98,11 +93,33 @@ public class App extends Application {
 			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
 					"Failed to execute the scheduled service to check the Internet connectivity\n"
 							+ "Application will closed. For more information's, see the log file.",
-					new ImageIcon("src/main/resources/images/wheelChair.png"));
+					new ImageIcon(pathToWheelChairIcon));
 
 			System.exit(1);
 		}
 
+		// Loader for config file
+		LoadToken loader = new LoadToken();
+
+		if(loader.isConfigFileExists()) {
+			// get the API key and store them in data bean
+			this.dataBean.setApiKey(loader.getApiKey());
+
+		} else {
+
+			try {
+				// create new config file in resource folder
+				loader.createConfigFile();
+			} catch (Exception ex) {
+				LOGGER.error("Failed to create config.yml file in resources folder. ", ex);
+
+				ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
+						"Can not create config file.\n"
+								+ "Application will closed. For more information's, see the log file.",
+						new ImageIcon(pathToWheelChairIcon));
+				System.exit(1);
+			}
+		}
 	}
 
 	@Override
@@ -228,7 +245,7 @@ public class App extends Application {
 						"No data could be read from the database. The database may be damaged or corrupt.\n"
 						+ "Please manually delete the database file (" + DbDirectory.DB_DIR.getAbsolutePath() + ")"
 								+ "\nand start the application again.",
-						new ImageIcon("src/main/resources/images/wheelChair.png"));
+						new ImageIcon(pathToWheelChairIcon));
 
 				System.exit(1);
 			}

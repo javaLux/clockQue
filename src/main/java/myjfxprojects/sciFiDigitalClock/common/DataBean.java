@@ -77,7 +77,7 @@ public class DataBean {
 	private final ImageView imgViewArrowBtnLeft;
 	private final ImageView imgViewArrowBtnRight;
 	
-	// field to declare if proxy is enabled or not -> value will changed by reading from database
+	// field to declare if proxy is enabled or not -> value will be changed by reading from database
 	public static boolean isProxyEnabled = false;
 	
 	// field define if the user changed the application settings -> used in close Method from cross button
@@ -97,10 +97,10 @@ public class DataBean {
 	
 	// Map holds all available Country codes with the correct country names
 	private Map<String, String> countries = new HashMap<String, String>();
-	
+
 	// start fields for API call
-	// you have to specify your own API Key from openweathermap.org
-	private final String API_KEY 			= "";
+	// this field will be assigned from the config.yml file
+	private String apiKey = "";
 	private final String API_WEATHER_URL	= "https://api.openweathermap.org/data/2.5/onecall?";
 	private final String API_LOCATION_URL	= "http://api.openweathermap.org/geo/1.0/direct?q=";
 	
@@ -338,11 +338,21 @@ public class DataBean {
 		
 		if((this.latitude != null) && !(this.latitude.isEmpty()) && (this.longitude != null) && !(this.longitude.isEmpty())) {
 			return String.format(this.API_WEATHER_URL + "lat=" + "%s" + "&lon=" + "%s" + "&lang=" + "%s" + "&units=" + "%s" + "&exclude=" + "%s" + "&appid=" + "%s",
-					this.latitude, this.longitude, this.language, this.tempUnitFormat.getUnitOfMeasurement(), this.excludes, this.API_KEY);
+					this.latitude, this.longitude, this.language, this.tempUnitFormat.getUnitOfMeasurement(), this.excludes, this.apiKey);
 		}
 		
 		return "";
 	}
+
+	/**
+	 * Get the currently used api key
+	 * @return -> api key
+	 */
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String key) {this.apiKey = key;}
 	
 	/**
 	 * Method create the correct URL for the Location data API call
@@ -353,7 +363,7 @@ public class DataBean {
 	public String getAPI_LOCATION_URL(String location) {
 		
 		if((location != null) && !(location.isEmpty())) {
-			return String.format(this.API_LOCATION_URL + location + "&limit=" + "%d" + "&appid=" + "%s", 5, this.API_KEY);
+			return String.format(this.API_LOCATION_URL + location + "&limit=" + "%d" + "&appid=" + "%s", 5, this.apiKey);
 		}
 		
 		return "";
@@ -468,7 +478,7 @@ public class DataBean {
 	}
 
 	/**
-	 * @param porxyPort the porxyPort to set
+	 * @param proxyPort the proxyPort to set
 	 */
 	public void setProxyPort(String proxyPort) {
 		this.proxyPort = proxyPort;
