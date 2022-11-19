@@ -47,7 +47,7 @@ public class LocationListViewApp {
 		// initialize own FXML loader
 		FxmlUtil fxmlUtil = new FxmlUtil();
 		
-		// load FXML file to root layout container with self made
+		// load FXML file to root layout container with self-made
     	// FxmlUtil class 
     	this.root = fxmlUtil.loadFxmlFile("/fxml/LocationListView.fxml");
 		
@@ -72,10 +72,10 @@ public class LocationListViewApp {
         	// set icon for dock and main window
         	this.listViewStage.getIcons().add(new Image("images/clock.png"));
         	// set window name
-        	this.listViewStage.setTitle("Ort hinzufügen");
+        	this.listViewStage.setTitle("Add location");
         	
         	// add event filter to handle close event for this stage
-        	// IMPORTANT: to enable btn search, btn cross and texfield if this stage
+        	// IMPORTANT: to enable btn search, btn cross and text field if this stage
         	// will close in a other way as to use the close button
         	this.listViewStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
         		this.dataBean.getDigitalClockFXMLcontroller().getBtnSearchTextfield().setDisable(false);
@@ -188,5 +188,4 @@ public class LocationListViewApp {
 			}
 		}	
 	}
-	
 }

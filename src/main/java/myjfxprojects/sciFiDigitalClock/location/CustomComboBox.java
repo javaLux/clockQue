@@ -34,20 +34,20 @@ public class CustomComboBox {
 	private ChangeListener<LocationObject> comboBoxListener = null;
 	
 	// Add location text
-	private final String addLocationText = "Ort hinzufügen";
+	private final String addLocationText = "Add location";
 	
 	// Add new location object
 	private LocationObject addLocationObject = null;
 	
 	// helper field to set the last selected location object after aborting search new location process correctly
-	private LocationObject helperlastSelectedLocation = null;
+	private LocationObject helperLastSelectedLocation = null;
 	
 	/**
 	 * constructor initialize members
 	 */
 	public CustomComboBox() {
 		
-		// First:	create a new pseudo location object as "addLoctionItem" to store them in the combo box
+		// First:	create a new pseudo location object as "addLocationItem" to store them in the combo box
 		this.addLocationObject = LocationObjectBuilder.getInstance()
 				.withFullLocationName("")
 				.withReducedLocationName(addLocationText)
@@ -67,7 +67,7 @@ public class CustomComboBox {
 		
 		// initialize ChangeListener
 		this.comboBoxListener = new ComboBoxListener();
-		// add ChangeListener to the combo box to listen if values changed or will selected
+		// add ChangeListener to the combo box to listen if values changed or will be selected
 		this.dataBean.getDigitalClockFXMLcontroller().getComboBoxLocations().getSelectionModel().selectedItemProperty().addListener(this.comboBoxListener);
 		
 		// We have to initialize and assigned a new skin to the combo box,
@@ -93,7 +93,7 @@ public class CustomComboBox {
 	}
 	
 	/**
-	 * Method make a customize list view skin of the combo box.
+	 * Method makes a customized list view skin of the combo box.
 	 */
 	public void initCustomComboBox() {
 		
@@ -111,7 +111,7 @@ public class CustomComboBox {
 	}
 	
 	public LocationObject getTheLastSelectedLocation() {
-		return this.helperlastSelectedLocation;
+		return this.helperLastSelectedLocation;
 	}
 	
 	/*
@@ -135,7 +135,7 @@ public class CustomComboBox {
 					// IMPORTANT:
 					// to select this location when user press the cross button to abort the search new location process
 					// otherwise the add location object is visible 
-					helperlastSelectedLocation = oldLocation;
+					helperLastSelectedLocation = oldLocation;
 				}
 			}
 			else {
@@ -150,7 +150,7 @@ public class CustomComboBox {
 				//			and update tool tip from digital clock with current time zone info's and
 				//			the date info's will be updated.
 				//			Last but not least, calculate current time shift in hours.
-				//			IMPORTANT:	This step will execute in a separate time line, because
+				//			IMPORTANT:	This step will execute in a separate timeline, because
 				//						time zone for this new location object is only available after the weather data
 				//						API call was successfully done.
 				Weather.getInstance().fetchWeatherDataAndSetTimeZone(newLocation);
@@ -159,7 +159,7 @@ public class CustomComboBox {
 				//			which location was selected at last by user
 				//			At first set all location items to false (isLastSelected Column)
 				dataBean.getJooqDbApi().setAllLocationsAsNotLastSelected();
-				//			Than mark the current location item as "isLastSelcted" in database 
+				//			Then mark the current location item as "isLastSelected" in database
 				dataBean.getJooqDbApi().setThisLocationAsLastSelected(newLocation);
 				
 			}

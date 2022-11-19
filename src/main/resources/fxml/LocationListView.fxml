@@ -18,7 +18,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label fx:id="lblChooseLocation" alignment="CENTER" text="Wähle aus der Liste einen neuen Ort aus:" textFill="#e8e8e8">
+            <Label fx:id="lblChooseLocation" alignment="CENTER" text="Select a new location from the list:" textFill="#e8e8e8">
                <font>
                   <Font name="Calibri Bold" size="14.0" />
                </font>

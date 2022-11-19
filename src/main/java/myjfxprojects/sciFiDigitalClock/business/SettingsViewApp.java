@@ -47,7 +47,7 @@ public class SettingsViewApp {
 		// initialize own FXML loader
 		FxmlUtil fxmlUtil = new FxmlUtil();
 		
-		// load FXML file to root layout container with self made
+		// load FXML file to root layout container with self-made
     	// FxmlUtil class 
     	this.root = fxmlUtil.loadFxmlFile("/fxml/SettingsView.fxml");
     	
@@ -72,7 +72,7 @@ public class SettingsViewApp {
         	// set icon for dock and main window
         	this.settingsViewStage.getIcons().add(new Image("images/clock.png"));
         	// set window name
-        	this.settingsViewStage.setTitle("Einstellungen");
+        	this.settingsViewStage.setTitle("Settings");
         	
         	// set user data to each radio button -> that means assigned the correct enum to the radio  button
         	this.dataBean.getSettingsViewController().getRadioBtnCelcius().setUserData(ETempUnits.METRIC);
@@ -116,7 +116,7 @@ public class SettingsViewApp {
         	this.toggleGroup.selectedToggleProperty().addListener(new ToggleGroupChangeListener());
         	
         	// Add Event Handling to text field proxy name to mark changes on the proxy settings
-        	this.dataBean.getSettingsViewController().getTxtFieldProxyName().textProperty().addListener(new TxtFieldProyNameChangeListener());
+        	this.dataBean.getSettingsViewController().getTxtFieldProxyName().textProperty().addListener(new TxtFieldProxyNameChangeListener());
         	
         	// Add Event Handling for text field Proxy Port, to ensure that ONLY numeric values are allowed
         	this.dataBean.getSettingsViewController().getTxtFieldProxyPort().textProperty().addListener(new TxtFieldProyPortChangeListener());
@@ -198,7 +198,7 @@ public class SettingsViewApp {
 		@Override
 		public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
 
-			// Only if selected radio button will changed -> set new temp unit value in data bean
+			// Only if selected radio button will be changed -> set new temp unit value in data bean
 			dataBean.setCurrentTempUnit((ETempUnits) toggleGroup.getSelectedToggle().getUserData());
 			// mark the changed settings event in data bean
 			DataBean.isAppSettingsChanged = true;
@@ -225,7 +225,7 @@ public class SettingsViewApp {
 	}
 	
 	// Change Listener for the Proxy Name text field, to mark if user changed the proxy settings
-	class TxtFieldProyNameChangeListener implements ChangeListener<String> {
+	class TxtFieldProxyNameChangeListener implements ChangeListener<String> {
 
 		@Override
 		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

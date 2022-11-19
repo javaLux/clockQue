@@ -10,7 +10,7 @@ import myjfxprojects.sciFiDigitalClock.common.DataBean;
 
 /**
  * Class for the NoResultTooltip
- * This Tool tip will automatically hide if main windows will moved with mouse on desktop!!!
+ * This Tool tip will automatically hide if main windows will be moved with mouse on desktop!!!
  * Managed in UndecoratedWindow class!!!
  * @author Christian
  *
@@ -29,13 +29,13 @@ public class NoResultTooltip extends Tooltip{
 	 */
 	private NoResultTooltip() {
 		
-		this.setText("Keine Ergebnisse gefunden");
+		this.setText("No results found");
 		this.setTextOverrun(OverrunStyle.ELLIPSIS);
 		this.setFont(Font.font("Calibri", FontWeight.BOLD, 13.0));
 	}
 	
 	/**
-	 * GETTER for an Singleton of this class
+	 * GETTER for a Singleton of this class
 	 * @return
 	 */
 	public static NoResultTooltip getInstance() {
@@ -48,7 +48,7 @@ public class NoResultTooltip extends Tooltip{
 	}
 	
 	/**
-	 * Method make no result tool tip visible and hide them if new input on text field will detected.
+	 * Method make no result tool tip visible and hide them if new input on text field will be detected.
 	 */
 	public void showNoResultTooltip() {
 		
@@ -73,7 +73,7 @@ public class NoResultTooltip extends Tooltip{
 			}
 		});
 		
-		// Hide this tool tip also if main window will be minimize or lost the focus!!!
+		// Hide this tool tip also if main window will be minimized or lost the focus!!!
 		this.dataBean.getPrimaryStage().focusedProperty().addListener(new ChangeListener<Boolean>() {
 
 			@Override

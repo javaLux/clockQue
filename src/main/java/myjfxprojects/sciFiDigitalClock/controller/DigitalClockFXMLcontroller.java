@@ -162,7 +162,7 @@ public class DigitalClockFXMLcontroller implements Initializable {
     @FXML
     void btnMinimizeMousePressed(MouseEvent event) {
     	this.dataBean.getPrimaryStage().setIconified(true);
-    	// check if list view window showing -> if this true than minimize this window too
+    	// check if list view window showing -> if this true minimize this window too
     	if(this.dataBean.getListViewStage().isShowing()) {
     		this.dataBean.getListViewStage().setIconified(true);
     	}

@@ -29,8 +29,8 @@ public class TimeZoneTooltip extends Tooltip{
 	private final Font fontValues = new Font("Calibri Bold", 13.0);
 	
 	// Strings for labels in the tool tip
-	private final String timeZoneText = "Zeitzone:";
-	private final String timeShiftText = "Zeitverschiebung:";
+	private final String timeZoneText = "Timezone:";
+	private final String timeShiftText = "Time shift:";
 	
 	// Labels for this tool tip
 	private Label lblTimeZoneText = new Label(timeZoneText);
@@ -89,7 +89,7 @@ public class TimeZoneTooltip extends Tooltip{
 	/**
 	 * Method assigned the current time shift value to the label.
 	 * 
-	 * @param timeShift	->	[long]	the time zone value
+	 * @param timeShiftValue	->	[long]	the time zone value
 	 */
 	public void setTimeShiftValue(long timeShiftValue) {
 		
