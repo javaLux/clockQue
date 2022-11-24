@@ -136,7 +136,7 @@ public class DataBean {
 	private final String defaultTimeZone = "Europe/Berlin";
 	
 	// define the width for main window and VBox middle to resize these if
-	// arrow button will clicked
+	// arrow button will be clicked
 	public static final double defaultWidthMainWindow		= 360.0;
 	public static final double minimizeWidthMainWindow 		= 230.0;
 	public static final double defaultWidthVboxMiddle 		= 130.0;

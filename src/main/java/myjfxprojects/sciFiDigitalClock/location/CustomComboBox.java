@@ -30,7 +30,7 @@ import myjfxprojects.sciFiDigitalClock.common.DataBean;
 public class CustomComboBox {
 
 	private ObservableList<LocationObject> listOfLocations = null;
-	private DataBean dataBean = DataBean.getInstance();
+	private final DataBean dataBean = DataBean.getInstance();
 	private ChangeListener<LocationObject> comboBoxListener = null;
 	
 	// Add location text
@@ -246,7 +246,7 @@ public class CustomComboBox {
             } else {
             	// IMPORTANT: 	Update each item in combo box list view with the reduced location name, to give the user
             	//				more details over the location objects which stored in the combo box
-            	lblText.setText(HandleLocationName.reduceLocationNameforComboBoxCells(item.getFullLocationName()));
+            	lblText.setText(HandleLocationName.reduceLocationName(item.getFullLocationName(), false));
             	setGraphic(graphic);
             }          
         }

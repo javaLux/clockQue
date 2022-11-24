@@ -41,7 +41,7 @@ public class DbHandling {
 	private static Logger LOGGER = ApplicationLogger.getAppLogger();
 	
 	// Thread safe instance of data bean
-	DataBean dataBean = DataBean.getInstance();
+	private final DataBean dataBean = DataBean.getInstance();
 	
 	// fields for database connection
 	private final String DB_NAME;
@@ -304,7 +304,8 @@ public class DbHandling {
 											.withFullLocationName(locationItem.get(COLUMN_CITY_NAME, String.class))
 											.withLatitude(locationItem.get(COLUMN_LATITUDE, String.class))
 											.withLongitude(locationItem.get(COLUMN_LONGITUDE, String.class))
-											.withReducedLocationName(HandleLocationName.reduceLocationName(locationItem.get(COLUMN_CITY_NAME, String.class)))
+											.withReducedLocationName(HandleLocationName.reduceLocationName(
+													locationItem.get(COLUMN_CITY_NAME, String.class)))
 											.build();
 					
 					// store each location object in the SET
@@ -342,7 +343,8 @@ public class DbHandling {
 						.withFullLocationName(locationItem.get(COLUMN_CITY_NAME, String.class))
 						.withLatitude(locationItem.get(COLUMN_LATITUDE, String.class))
 						.withLongitude(locationItem.get(COLUMN_LONGITUDE, String.class))
-						.withReducedLocationName(HandleLocationName.reduceLocationName(locationItem.get(COLUMN_CITY_NAME, String.class)))
+						.withReducedLocationName(HandleLocationName.reduceLocationName(
+								locationItem.get(COLUMN_CITY_NAME, String.class)))
 						.build();
 				
 				// store them in data bean as last selected location object

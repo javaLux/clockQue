@@ -25,10 +25,10 @@ import myjfxprojects.sciFiDigitalClock.common.FxmlUtil;
 public class LocationListViewApp {
 
 	// Thread safe instance of the data bean
-	private DataBean dataBean = DataBean.getInstance();
+	private final DataBean dataBean = DataBean.getInstance();
 
 	// Search location instance
-	private SearchLocation searchLocation = SearchLocation.getInstance();
+	private final SearchLocation searchLocation = SearchLocation.getInstance();
 	
 	// Stage for location list view
 	private Stage listViewStage = null;
@@ -76,7 +76,7 @@ public class LocationListViewApp {
         	
         	// add event filter to handle close event for this stage
         	// IMPORTANT: to enable btn search, btn cross and text field if this stage
-        	// will close in a other way as to use the close button
+        	// will be closed in other way as to use the close button
         	this.listViewStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
         		this.dataBean.getDigitalClockFXMLcontroller().getBtnSearchTextfield().setDisable(false);
         		this.dataBean.getDigitalClockFXMLcontroller().getBtnCrossTextfield().setDisable(false);
@@ -90,7 +90,7 @@ public class LocationListViewApp {
         	// Event filter to ignore key pressed events on the complete stage
         	this.listViewStage.addEventFilter(KeyEvent.ANY, Event::consume);
         	
-        	// bind the disable property of the arrow button to minimize/maximize VBox middle with
+        	// bind the disabled property of the arrow button to minimize/maximize VBox middle with
         	// the showing property of the list view stage -> user can not minimize the VBox if list view stage is showing
         	this.dataBean.getDigitalClockFXMLcontroller().getBtnResizeVboxMiddle().disableProperty()
         			.bind(this.dataBean.getListViewStage().showingProperty());
@@ -161,7 +161,7 @@ public class LocationListViewApp {
 				//			which location was selected at last by user
 				//			At first set all location items to false (isLastSelected Column)
 				dataBean.getJooqDbApi().setAllLocationsAsNotLastSelected();
-				//			Than mark the current location item as "isCurrentActive" in database 
+				//			Then mark the current location item as "isCurrentActive" in database
 				dataBean.getJooqDbApi().setThisLocationAsLastSelected(locationObject);
 				
 				// fourth:	store the new location object in SET

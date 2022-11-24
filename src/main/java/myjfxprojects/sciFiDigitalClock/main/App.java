@@ -28,7 +28,7 @@ import javax.swing.*;
 public class App extends Application {
 
 	// initialize data bean singleton
-	private DataBean dataBean = DataBean.getInstance();
+	private final DataBean dataBean = DataBean.getInstance();
 
 	private final String pathToWheelChairIcon = "resources/images/wheelChair.png";
 
