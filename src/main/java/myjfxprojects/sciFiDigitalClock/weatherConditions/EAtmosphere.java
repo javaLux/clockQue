@@ -6,13 +6,13 @@ package myjfxprojects.sciFiDigitalClock.weatherConditions;
  */
 public enum EAtmosphere {
 	
-	ATMOS("images/weather/normal/atmosphere.png");
+	ATMOSPHERE("images/weather/normal/atmosphere.png");
+
+	private final String pathToIcon;
 
 	private EAtmosphere(String path)  {
 		this.pathToIcon = path;
 	}
-
-	private String pathToIcon;
 
 	public String getPathToIcon() {
 		return this.pathToIcon;

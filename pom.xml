@@ -60,11 +60,11 @@
 			<version>2.14.0</version>
 		</dependency>
 
-		<!-- Java Database Connectivity for SQlite-->
+		<!-- Java Database Connectivity for SQLite-->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.39.3.0</version>
+			<version>3.39.4.0</version>
 		</dependency>
 		<!-- JOOQ framework to talk with the database -->
 		<dependency>

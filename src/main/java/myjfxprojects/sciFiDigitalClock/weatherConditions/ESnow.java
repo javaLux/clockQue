@@ -8,11 +8,11 @@ public enum ESnow {
 	
 	SNOW("images/weather/normal/snow.png");
 
+	private final String pathToIcon;
+
 	private ESnow(String path)  {
 		this.pathToIcon = path;
 	}
-
-	private String pathToIcon;
 
 	public String getPathToIcon() {
 		return this.pathToIcon;

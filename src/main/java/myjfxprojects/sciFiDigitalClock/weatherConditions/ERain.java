@@ -10,11 +10,11 @@ public enum ERain {
 	SHOWER_RAIN("images/weather/normal/showerRain.png"),
 	FREEZING_RAIN("images/weather/normal/freezingRain.png");
 
+	private final String pathToIcon;
+
 	private ERain(String path)  {
 		this.pathToIcon = path;
 	}
-
-	private String pathToIcon;
 
 	public String getPathToIcon() {
 		return this.pathToIcon;

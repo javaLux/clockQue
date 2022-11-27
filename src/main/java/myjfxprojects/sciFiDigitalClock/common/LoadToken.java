@@ -15,6 +15,8 @@ public class LoadToken {
 
 	//Path to the config file, dependent on the build artifact
 	private final String configFilePath = Paths.get("resources", "config.yml").toAbsolutePath().toString();
+	// path to run application on IDE
+//	private final String configFilePath = Paths.get("src", "main","resources", "config.yml").toAbsolutePath().toString();
 
 	private static File configFile = null;
 
@@ -22,7 +24,6 @@ public class LoadToken {
 
 		try {
 			configFile = new File(configFilePath);
-			System.out.println(configFilePath);
 		} catch (NullPointerException ex) {
 			return false;
 		}

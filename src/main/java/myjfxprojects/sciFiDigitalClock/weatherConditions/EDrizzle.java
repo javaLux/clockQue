@@ -8,11 +8,11 @@ public enum EDrizzle {
 
 	DRIZZLE("images/weather/normal/lightRain.png");
 
+	private final String pathToIcon;
+
 	private EDrizzle(String path)  {
 		this.pathToIcon = path;
 	}
-
-	private String pathToIcon;
 
 	public String getPathToIcon() {
 		return this.pathToIcon;

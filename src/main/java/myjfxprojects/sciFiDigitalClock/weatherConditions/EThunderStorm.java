@@ -9,12 +9,12 @@ package myjfxprojects.sciFiDigitalClock.weatherConditions;
 public enum EThunderStorm {
 	
 	THUNDERSTORM("images/weather/normal/lightning.png");
+
+	private final String pathToIcon;
 	
 	EThunderStorm(String path) {
 		this.pathToIcon = path;
 	}
-	
-	private String pathToIcon;
 	
 	public String getPathToIcon() {
 		return this.pathToIcon;

@@ -71,7 +71,7 @@ public class DbHandling {
 	// field for database connection
 	private Connection dbConnection = null;
 	
-	// field for the JOOQ SQL executer
+	// field for the JOOQ SQL context handler
 	private DSLContext sqlContext = null;
 	
 	// boolean that specify a location as last selected

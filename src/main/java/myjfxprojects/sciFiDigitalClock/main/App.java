@@ -1,6 +1,7 @@
 package myjfxprojects.sciFiDigitalClock.main;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.scene.Parent;
@@ -31,9 +32,6 @@ public class App extends Application {
 	private final DataBean dataBean = DataBean.getInstance();
 
 	private final String pathToWheelChairIcon = "resources/images/wheelChair.png";
-
-	// root layout manager
-	private Parent root = null;
 
 	@Override
 	public void init() {
@@ -130,10 +128,11 @@ public class App extends Application {
 
 		// load FXML file to root layout container with self-made
 		// FxmlUtil class
-		this.root = fxmlUtil.loadFxmlFile("/fxml/ClockView.fxml");
+		// root layout manager
+		Parent root = fxmlUtil.loadFxmlFile("/fxml/ClockView.fxml");
 
 		// if FXML file successfully loaded -> set in scene
-		if (this.root != null) {
+		if (root != null) {
 
 			// if it was possible to get locations from database than run the APP
 			// e.g. the database has no location entries than give user info and stop the APP
@@ -235,8 +234,7 @@ public class App extends Application {
 				// IMPORTANT: if main window will be closed from task bar -> than close the
 				// complete application with all opened windows
 				primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> {
-
-					
+					System.exit(0);
 				});
 			}
 			// show error message box if no locations couldn't read from database

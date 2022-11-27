@@ -41,8 +41,8 @@ public class WeatherCondition {
 	private WeatherCondition() {}
 	
 	/**
-	 * GETTER for an Thread-Safe Singleton of this class
-	 * @return
+	 * GETTER for a Thread-Safe Singleton instance
+	 * @return	-> this
 	 */
 	public static WeatherCondition getInstance() {
 		if(instance == null) {
@@ -85,7 +85,7 @@ public class WeatherCondition {
 				return ESnow.SNOW.getPathToIcon();
 			}
 			else if(this.atmosphereIDList.contains(id)) {
-				return EAtmosphere.ATMOS.getPathToIcon();
+				return EAtmosphere.ATMOSPHERE.getPathToIcon();
 			}
 			
 			else if(this.clearIDList.contains(id)) {
